@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='/dashboard.css') }}"> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  </head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/">Welcome {{loggedUser.username}} </a>
+          
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+              <a class="nav-link active" aria-current="page" href="/dashboard">Dashboard</a>
+              <a class="nav-link active" aria-current="page" href="/add/team">Add Team</a>
+
+              <a class="nav-link" href="/logout">Logout</a>
+
+            </div>
+          </div>
+        </div>
+      </nav>
+        
+      <h1 class="text-center mt-2">Edit {{team.name}}</h1>
+      {% with messages = get_flashed_messages(category_filter=["allRequired"]) %}
+                {% if messages %}
+                    
+                    {% for message in messages %}
+                    <p class="text-danger text-center">{{ message }}</p>
+                    {% endfor %}
+                    
+                {% endif %}
+                {% endwith %}
+      <form class="w-50 m-auto" action="/update/team/{{team.id}}" method="post">
+        
+        <div class="mb-3">
+          <label for="founded">Founded</label>
+          <input type="date" value="{{team.founded}}" name="founded" id="founded" class="form-control">
+        </div>
+        {% with messages = get_flashed_messages(category_filter=["founded"]) %}
+            {% if messages %}
+                
+                {% for message in messages %}
+                <p class="text-danger text-center">{{ message }}</p>
+                {% endfor %}
+                
+            {% endif %}
+            {% endwith %}
+        <div class="mb-3">
+          <label for="league">League</label>
+          <input type="text" value="{{team.league}}" name="league" id="league" class="form-control">
+        </div>
+        {% with messages = get_flashed_messages(category_filter=["league"]) %}
+            {% if messages %}
+                
+                {% for message in messages %}
+                <p class="text-danger text-center">{{ message }}</p>
+                {% endfor %}
+                
+            {% endif %}
+            {% endwith %}
+        <div class="mb-3">
+          <label for="homeStadium">Home Stadium</label>
+          <input type="text" value="{{team.homeStadium}}" name="homeStadium" id="homeStadium" class="form-control">
+        </div>
+        {% with messages = get_flashed_messages(category_filter=["homeStadium"]) %}
+            {% if messages %}
+                
+                {% for message in messages %}
+                <p class="text-danger text-center">{{ message }}</p>
+                {% endfor %}
+                
+            {% endif %}
+            {% endwith %}
+
+            <div class="mb-3">
+              <label for="trophies">Number of trophies</label>
+              <input type="number" value="{{team.trophies}}" name="trophies" id="trophies" class="form-control">
+            </div>
+            {% with messages = get_flashed_messages(category_filter=["trophies"]) %}
+                {% if messages %}
+                    
+                    {% for message in messages %}
+                    <p class="text-danger text-center">{{ message }}</p>
+                    {% endfor %}
+                    
+                {% endif %}
+                {% endwith %}
+                <div class="mb-3">
+                  <label for="nrOfPlayers">Number of players</label>
+                  <input type="number" min="0" max="26" value="{{team.nrOfPlayers}}" name="nrOfPlayers" id="nrOfPlayers" class="form-control">
+                </div>
+                {% with messages = get_flashed_messages(category_filter=["nrOfPlayers"]) %}
+                {% if messages %}
+                    
+                    {% for message in messages %}
+                    <p class="text-danger text-center">{{ message }}</p>
+                    {% endfor %}
+                    
+                {% endif %}
+                {% endwith %}
+        <button class="btn btn-primary">Update Team</button>
+  
+      </form>
+      
+</body>
+</html>

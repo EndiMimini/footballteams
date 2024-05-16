@@ -1,0 +1,8 @@
+#likers{
+    background-color: lightgray;
+    opacity: 0,8;
+    position: relative;
+    bottom: 100px;
+    left: 50px;
+    width: 200px;
+}
