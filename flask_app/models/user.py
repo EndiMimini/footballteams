@@ -6,7 +6,7 @@ EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
 
 
 class User:
-    db_name = 'footballteams'
+    db_name = 'tvshows'
     def __init__( self , data ):
         self.id = data['id']
         self.username = data['username']
@@ -18,7 +18,7 @@ class User:
 
     @classmethod
     def create(cls, data):
-        query = 'INSERT INTO users (username, email, password) VALUES ( %(username)s, %(email)s, %(password)s );'
+        query = 'INSERT INTO users (username, email, password, verificationCode) VALUES ( %(username)s, %(email)s, %(password)s, %(verificationCode)s);'
         return connectToMySQL(cls.db_name).query_db(query, data)
     
     @classmethod
@@ -46,6 +46,16 @@ class User:
         if results:
             return results[0]
         return False
+    
+    @classmethod
+    def updateVerificationCode(cls, data):
+        query = "UPDATE users set verificationCode = %(verificationCode)s where id = %(id)s;"
+        return connectToMySQL(cls.db_name).query_db(query, data)
+    
+    @classmethod
+    def activateAccount(cls, data):
+        query = "UPDATE users set isVerified = 1 where id = %(id)s;"
+        return connectToMySQL(cls.db_name).query_db(query, data)
     
     @classmethod
     def delete_user(cls, data):

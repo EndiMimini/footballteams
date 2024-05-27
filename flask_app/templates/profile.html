@@ -45,20 +45,20 @@
           <tbody>
               {% for team in teams %}
                   <tr>
-                      <th scope="row">{{team.id}}</th>
-                      <td>{{team.name}}</td>
-                      <td>{{team.homeStadium}}</td>
+                      <th scope="row">{{show.id}}</th>
+                      <td>{{Show.name}}</td>
+                      <td>{{Show.homeStadium}}</td>
                       <td>
-                        <a href="/team/{{team.id}}">View more</a>
+                        <a href="/show/{{show.id}}">View more</a>
   
-                        {% if loggedUser.id == team.user_id %}
-                        <a class="btn btn-warning" href="/edit/team/{{team.id}}">Edit</a>
+                        {% if loggedUser.id == Show.user_id %}
+                        <a class="btn btn-warning" href="/edit/show/{{show.id}}">Edit</a>
                         
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteAccount{{team.id}}">
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteAccount{{show.id}}">
                           Delete this team
                         </button>
   
-                        <div class="modal fade" id="deleteAccount{{team.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="deleteAccount{{show.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                           <div class="modal-dialog">
                             <div class="modal-content">
                               <div class="modal-header">
@@ -68,7 +68,7 @@
                              
                               <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <a class="btn btn-danger" href="/delete/team/{{team.id}}">Im sure</a>
+                                <a class="btn btn-danger" href="/delete/show/{{show.id}}">Im sure</a>
   
                               </div>
                             </div>

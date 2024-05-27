@@ -19,7 +19,7 @@
           <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
               <a class="nav-link active" aria-current="page" href="/dashboard">Dashboard</a>
-              <a class="nav-link active" aria-current="page" href="/add/team">Add Team</a>
+              <a class="nav-link active" aria-current="page" href="/add/show">Add show</a>
 
               <a class="nav-link" href="/logout">Logout</a>
 
@@ -28,7 +28,7 @@
         </div>
       </nav>
         
-      <h1 class="text-center mt-2">Edit {{team.name}}</h1>
+      <h1 class="text-center mt-2">Edit {{show.name}}</h1>
       {% with messages = get_flashed_messages(category_filter=["allRequired"]) %}
                 {% if messages %}
                     
@@ -38,13 +38,13 @@
                     
                 {% endif %}
                 {% endwith %}
-      <form class="w-50 m-auto" action="/update/team/{{team.id}}" method="post">
+      <form class="w-50 m-auto" action="/update/show/{{show.id}}" method="post">
         
         <div class="mb-3">
-          <label for="founded">Founded</label>
-          <input type="date" value="{{team.founded}}" name="founded" id="founded" class="form-control">
+          <label for="releaseDate">Release Date</label>
+          <input type="date" value="{{show.releaseDate}}" name="releaseDate" id="releaseDate" class="form-control">
         </div>
-        {% with messages = get_flashed_messages(category_filter=["founded"]) %}
+        {% with messages = get_flashed_messages(category_filter=["releaseDate"]) %}
             {% if messages %}
                 
                 {% for message in messages %}
@@ -54,10 +54,10 @@
             {% endif %}
             {% endwith %}
         <div class="mb-3">
-          <label for="league">League</label>
-          <input type="text" value="{{team.league}}" name="league" id="league" class="form-control">
+          <label for="network">Network</label>
+          <input type="text" value="{{show.network}}" name="network" id="network" class="form-control">
         </div>
-        {% with messages = get_flashed_messages(category_filter=["league"]) %}
+        {% with messages = get_flashed_messages(category_filter=["network"]) %}
             {% if messages %}
                 
                 {% for message in messages %}
@@ -67,10 +67,10 @@
             {% endif %}
             {% endwith %}
         <div class="mb-3">
-          <label for="homeStadium">Home Stadium</label>
-          <input type="text" value="{{team.homeStadium}}" name="homeStadium" id="homeStadium" class="form-control">
+          <label for="description">Description</label>
+          <textarea name="description" id="description">{{show.description}}</textarea>
         </div>
-        {% with messages = get_flashed_messages(category_filter=["homeStadium"]) %}
+        {% with messages = get_flashed_messages(category_filter=["description"]) %}
             {% if messages %}
                 
                 {% for message in messages %}
@@ -80,33 +80,8 @@
             {% endif %}
             {% endwith %}
 
-            <div class="mb-3">
-              <label for="trophies">Number of trophies</label>
-              <input type="number" value="{{team.trophies}}" name="trophies" id="trophies" class="form-control">
-            </div>
-            {% with messages = get_flashed_messages(category_filter=["trophies"]) %}
-                {% if messages %}
-                    
-                    {% for message in messages %}
-                    <p class="text-danger text-center">{{ message }}</p>
-                    {% endfor %}
-                    
-                {% endif %}
-                {% endwith %}
-                <div class="mb-3">
-                  <label for="nrOfPlayers">Number of players</label>
-                  <input type="number" min="0" max="26" value="{{team.nrOfPlayers}}" name="nrOfPlayers" id="nrOfPlayers" class="form-control">
-                </div>
-                {% with messages = get_flashed_messages(category_filter=["nrOfPlayers"]) %}
-                {% if messages %}
-                    
-                    {% for message in messages %}
-                    <p class="text-danger text-center">{{ message }}</p>
-                    {% endfor %}
-                    
-                {% endif %}
-                {% endwith %}
-        <button class="btn btn-primary">Update Team</button>
+            
+        <button class="btn btn-primary">Update Show</button>
   
       </form>
       

@@ -19,7 +19,7 @@
           <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
               <a class="nav-link active" aria-current="page" href="/dashboard">Dashboard</a>
-              <a class="nav-link active" aria-current="page" href="/add/team">Add Team</a>
+              <a class="nav-link active" aria-current="page" href="/add/show">Add Team</a>
 
               <a class="nav-link" href="/logout">Logout</a>
 
@@ -28,10 +28,10 @@
         </div>
       </nav>
         
-      <h1 class="text-center mt-2">Create a new team</h1>
-      <form class="w-50 m-auto" action="/create/team" method="post">
+      <h1 class="text-center mt-2">Create a new tv show</h1>
+      <form class="w-50 m-auto" action="/create/show" method="post" enctype="multipart/form-data">
         <div class="mb-3">
-          <label for="name">Team Name</label>
+          <label for="name">Show Name</label>
           <input type="text" name="name" id="name" class="form-control">
         </div>
         {% with messages = get_flashed_messages(category_filter=["name"]) %}
@@ -44,10 +44,10 @@
             {% endif %}
             {% endwith %}
         <div class="mb-3">
-          <label for="founded">Founded</label>
-          <input type="date" name="founded" id="founded" class="form-control">
+          <label for="releaseDate">Release Date</label>
+          <input type="date" name="releaseDate" id="releaseDate" class="form-control">
         </div>
-        {% with messages = get_flashed_messages(category_filter=["founded"]) %}
+        {% with messages = get_flashed_messages(category_filter=["releaseDate"]) %}
             {% if messages %}
                 
                 {% for message in messages %}
@@ -57,10 +57,10 @@
             {% endif %}
             {% endwith %}
         <div class="mb-3">
-          <label for="league">League</label>
-          <input type="text" name="league" id="league" class="form-control">
+          <label for="network">Network</label>
+          <input type="text" name="network" id="network" class="form-control">
         </div>
-        {% with messages = get_flashed_messages(category_filter=["league"]) %}
+        {% with messages = get_flashed_messages(category_filter=["network"]) %}
             {% if messages %}
                 
                 {% for message in messages %}
@@ -70,10 +70,10 @@
             {% endif %}
             {% endwith %}
         <div class="mb-3">
-          <label for="homeStadium">Home Stadium</label>
-          <input type="text" name="homeStadium" id="homeStadium" class="form-control">
+          <label for="description">Description</label>
+          <textarea name="description" id="description" cols="30" rows="5" class="form-control"></textarea>
         </div>
-        {% with messages = get_flashed_messages(category_filter=["homeStadium"]) %}
+        {% with messages = get_flashed_messages(category_filter=["description"]) %}
             {% if messages %}
                 
                 {% for message in messages %}
@@ -82,12 +82,11 @@
                 
             {% endif %}
             {% endwith %}
-
             <div class="mb-3">
-              <label for="trophies">Number of trophies</label>
-              <input type="number" name="trophies" id="trophies" class="form-control">
+              <label for="description">Show image</label>
+              <input type="file" class="form-control" required name="image" accept="image/png, image/jpg, image/jpeg">
             </div>
-            {% with messages = get_flashed_messages(category_filter=["trophies"]) %}
+            {% with messages = get_flashed_messages(category_filter=["description"]) %}
                 {% if messages %}
                     
                     {% for message in messages %}
@@ -96,7 +95,9 @@
                     
                 {% endif %}
                 {% endwith %}
-        <button class="btn btn-primary">Create Team</button>
+
+          
+        <button class="btn btn-primary">Create Tv show</button>
   
       </form>
       

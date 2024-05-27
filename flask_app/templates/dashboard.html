@@ -19,7 +19,7 @@
           <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
               <a class="nav-link active" aria-current="page" href="/dashboard">Dashboard</a>
-              <a class="nav-link active" aria-current="page" href="/add/team">Add Team</a>
+              <a class="nav-link active" aria-current="page" href="/add/show">Add show</a>
 
               <a class="nav-link active" aria-current="page" href="/profile">Profile</a>
 
@@ -31,46 +31,49 @@
         </div>
       </nav>
         
-      <h1 class="text-center mt-2">All Teams</h1>
+      <h1 class="text-center mt-2">All shows</h1>
       
       <table class="table">
 
         <thead>
           <tr>
             <th scope="col">#</th>
-            <th scope="col">Team Name</th>
-            <th scope="col">Home Stadium</th>
+            <th scope="col">Show Name</th>
+            <th scope="col">Network </th>
+            <th scope="col">Relase Date </th>
             <th scope="col">Actions</th>
 
           </tr>
         </thead>
         <tbody>
-            {% for team in teams %}
+            {% for show in shows %}
                 <tr>
-                    <th scope="row">{{team.id}}</th>
-                    <td>{{team.name}}</td>
-                    <td>{{team.homeStadium}}</td>
-                    <td>
-                      <a href="/team/{{team.id}}">View more</a>
+                    <th scope="row">{{show.id}}</th>
+                    <td>{{show.name}}</td>
+                    <td>{{show.network}}</td>
+                    <td>{{show.releaseDate}}</td>
 
-                      {% if loggedUser.id == team.user_id %}
-                      <a class="btn btn-warning" href="/edit/team/{{team.id}}">Edit</a>
+                    <td>
+                      <a href="/show/{{show.id}}">View more</a>
+
+                      {% if loggedUser.id == show.user_id %}
+                      <a class="btn btn-warning" href="/edit/show/{{show.id}}">Edit</a>
                       
-                      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteAccount{{team.id}}">
-                        Delete this team
+                      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteAccount{{show.id}}">
+                        Delete this show
                       </button>
 
-                      <div class="modal fade" id="deleteAccount{{team.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal fade" id="deleteAccount{{show.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                           <div class="modal-content">
                             <div class="modal-header">
-                              <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to delete you account?</h5>
+                              <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to delete thos show?</h5>
                               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                            
                             <div class="modal-footer">
                               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                              <a class="btn btn-danger" href="/delete/team/{{team.id}}">Im sure</a>
+                              <a class="btn btn-danger" href="/delete/show/{{show.id}}">Im sure</a>
 
                             </div>
                           </div>

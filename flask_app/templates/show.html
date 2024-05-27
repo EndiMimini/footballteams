@@ -8,6 +8,16 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/dashboard.css') }}">
     <script defer type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
 </head>
+<style>
+  .myImage{
+    display: flex;
+    margin: auto;
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    
+  }
+</style>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
@@ -24,33 +34,47 @@
           </div>
         </div>
       </nav>
-        
-      <h1 class="text-center mt-2">Team Info</h1>
-      <div class="text-center">
-        <p>Name: {{team.name}}</p>
-        <p>Trophies: {{team.trophies}}</p>
-        <p>Founded: {{team.founded}}</p>
-        <p>Nr of players: {{team.nrOfPlayers}}</p>
-        <p>Home Stadium: {{team.homeStadium}}</p>
-        <p>League: {{team.league}}</p>
-        <p>Record created on: {{team.created_at}}</p>
-        <p>Last updated: {{team.updated_at}}</p>
-        <p>Record Creator: {{team.email}}</p>
+    <div class="card w-75 m-auto">        
+      <img class="myImage" src="../static/UPLOADED_FOLDER/{{show.image}}" alt="">
+
+      <div class="">
+
+      
+      
+      <div>
+        <div class="d-flex justify-content-center align-items-center">
+        <h2 class="px-2">Show Name:</h2>
+        <h2 class="px-2">{{show.name}}</h2>
+       </div>
+       <div class="d-flex justify-content-evenly">
+        <div>
+          <p>Release Date: {{show.releaseDate}}</p>
+          <p>Network: {{show.network}}</p>
+
+        </div>
+          <div>
+            <p>Description: {{show.description}}</p>
+            <p>Show Creator: {{show.email}}</p>
+          </div>
+        </div>
+
         <h4 onmouseenter="showLikers('likers')" onmouseleave="hideLikers('likers')">Likes: {{usersWhoLiked|length}}</h4>
         <h2>All likers</h2>
         <div id="likers" class="d-none">
           {% for pers in likersDetails %}
           <p>{{pers.email}}</p>
           {% endfor %}
-      </div>
+        </div>
         {% if loggedUser.id in usersWhoLiked %}
-        <a class="btn btn-warning" href="/unlike/{{team.id}}">Unlike team</a>      
+        <a class="btn btn-warning" href="/unlike/{{show.id}}">Unlike show</a>      
         {% else %}
-        <a class="btn btn-primary" href="/like/{{team.id}}">Like team</a>      
+        <a class="btn btn-primary" href="/like/{{show.id}}">Like show</a>      
         {% endif %}
 
        
 
-</div>
+      </div>
+    </div>
+    </div>
 </body>
 </html>

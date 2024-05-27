@@ -1,15 +1,22 @@
 from flask_app import app
 from flask import render_template, redirect, session, request, flash
 from flask_app.models.user import User
-from flask_app.models.team import Team
-from flask_bcrypt import Bcrypt        
+from flask_app.models.tvshow import Show
+from flask_bcrypt import Bcrypt      
+import math  
+import random
+import smtplib
 bcrypt = Bcrypt(app)
+
+from .env import ADMINEMAIL
+from .env import PASSWORD
+
 
 @app.route('/')
 def controller():
     if 'user_id' not in session:
         return redirect('/logout')
-    return redirect('/dashboard')
+    return redirect('/verify/email')
     
 @app.route('/register')
 def registerPage():
@@ -57,12 +64,38 @@ def registerUser():
     if user:
         flash('This user already exists! Try another email', 'emailRegister')
         return redirect(request.referrer)
+    string = '0123456789ABCDEFGHIJKELNOPKQSTUV'
+    vCode = ""
+    length = len(string)
+    for i in range(4) :
+        vCode += string[math.floor(random.random() * length)]
+    verificationCode = vCode
+
     data = {
         'username': request.form['username'],
         'email': request.form['email'],
         'password': bcrypt.generate_password_hash(request.form['password']),
+        'verificationCode': verificationCode
     }
     user_id = User.create(data)
+
+
+    LOGIN = ADMINEMAIL
+    TOADDRS  = request.form['email']
+    SENDER = ADMINEMAIL
+    SUBJECT = 'Verify Your Email'
+    msg = ("From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n"
+        % ((SENDER), "".join(TOADDRS), SUBJECT) )
+    msg += f'Use this verification code to activate your account: {verificationCode}'
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.set_debuglevel(1)
+    server.ehlo()
+    server.starttls()
+    server.login(LOGIN, PASSWORD)
+    server.sendmail(SENDER, TOADDRS, msg)
+    server.quit()
+
+    
     session['user_id'] = user_id
 
     return redirect('/')
@@ -71,12 +104,14 @@ def registerUser():
 def dashboardPage():
     if 'user_id' not in session:
         return redirect('/')
-    teams = Team.getAllTeams()
+    shows = Show.getAlltvshows()
     data = {
         'id': session['user_id']
     }
     loggedUser = User.get_user_by_id(data)
-    return render_template('dashboard.html', teams=teams, loggedUser=loggedUser)
+    if loggedUser['isVerified'] != 1:
+        return redirect('/')
+    return render_template('dashboard.html', shows=shows, loggedUser=loggedUser)
 
 
 @app.route('/profile')
@@ -87,45 +122,80 @@ def profile():
         'id': session['user_id']
     }
     user = User.get_user_by_id(data)
-    teams = Team.get_logged_teams(data)
+    if user['isVerified'] != 1:
+        return redirect('/')
+    shows = Show.get_logged_tvshows(data)
     if user:
-        return render_template('profile.html', loggedUser=user, teams=teams)
+        return render_template('profile.html', loggedUser=user, shows=shows)
     return redirect('/')
 
 
 
-# @app.route('/edit/user')
-# def editProfile():
-#     if 'user_id' not in session:
-#         return redirect('/')
-#     data ={
-#         'id': session['user_id']
-#     }
-#     user = User.get_user_by_id(data)
-#     return render_template('editProfile.html', user=user)
-
-# @app.route('/update/user', methods = ['POST'])
-# def updateUser():
-#     if 'user_id' not in session:
-#         return redirect('/')
-#     data = {
-#         'id': session['user_id'],
-#         'username': request.form['username'],
-#         'email': request.form['email']
-#     }
-#     User.update_user(data)
-#     return redirect('/dashboard')
-
-@app.route('/delete')
-def delete():
+@app.route('/verify/email')
+def verifyEmail():
     if 'user_id' not in session:
         return redirect('/')
-    data ={
+    data = {
         'id': session['user_id']
     }
-    User.delete_users_team(data)
-    User.delete_user(data)
-    return redirect('/logout')
+    user = User.get_user_by_id(data)
+    if user['isVerified'] == 1:
+        return redirect('/dashboard')
+    return render_template('verifyEmail.html', loggedUser = user)
+
+@app.route('/activate/account', methods=['POST'])
+def activateAccount():
+    if 'user_id' not in session:
+        return redirect('/')
+    data = {
+        'id': session['user_id']
+    }
+    user = User.get_user_by_id(data)
+    if user['isVerified'] == 1:
+        return redirect('/dashboard')
+    
+    if not request.form['value1'] or not request.form['value2'] or not request.form['value3'] or not request.form['value4'] :
+        flash('Verification Code is required', 'wrongCode')
+        return redirect(request.referrer)
+    
+    totalVerificationCode = request.form['value1']+request.form['value2']+request.form['value3']+request.form['value4']
+    
+    if totalVerificationCode != user['verificationCode']:
+        
+        string = '0123456789'
+        vCode = ""
+        length = len(string)
+        for i in range(4) :
+            vCode += string[math.floor(random.random() * length)]
+        verificationCode = vCode
+        dataUpdate = {
+            'verificationCode': verificationCode,
+            'id': session['user_id']
+        }
+        User.updateVerificationCode(dataUpdate)
+        LOGIN = ADMINEMAIL
+        TOADDRS  = user['email']
+        SENDER = ADMINEMAIL
+        SUBJECT = 'Verify Your Email'
+        msg = ("From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n"
+            % ((SENDER), "".join(TOADDRS), SUBJECT) )
+        msg += f'Use this verification code to activate your account: {verificationCode}'
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.set_debuglevel(1)
+        server.ehlo()
+        server.starttls()
+        server.login(LOGIN, PASSWORD)
+        server.sendmail(SENDER, TOADDRS, msg)
+        server.quit()
+        
+
+
+        flash('Verification Code is wrong. We just sent you a new one', 'wrongCode')
+        return redirect(request.referrer)
+    
+    User.activateAccount(data)
+    return redirect('/dashboard')
+
 
 @app.route('/logout')
 def logout():
